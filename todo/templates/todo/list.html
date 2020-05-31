@@ -1,3 +1,81 @@
-{% for task in tasks %}
-    {{ task }}
-{% endfor %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    
+    <title>Todo_Django</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Djangoでtodo作ってみた</h1>
+        </header>
+        <main>
+            <h2>NewTask</h2>
+                <form action="{% url 'submit' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="subject" class="col-sm-2 col-form-label">課題内容</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="subject" name="subject">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="note" class="col-sm-2 col-form-label">メモ</label>
+                        <div class="col-sm-10">
+                            <input type="textarea" class="form-control" id="note" name="note">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="deadline" class="col-sm-2 col-form-label">期限</label>
+                        <div class="col-sm-4">
+                            <input type="datetime-local" class="form-control" id="deadline" name="deadline">
+                        </div>
+                        <button type="submit" class="btn btn-primary col-sm-1">登録</button>
+                    </div>
+                                        
+                </form>
+            <h2>ToDoList</h2>
+            <table class="table table-striped">
+                <thead class="thead-lignt">
+                <tr>
+                    <th>完了</th>
+                    <th>期限</th>
+                    <th>課題</th>
+                    <th>メモ</th>
+                    <th>作成日</th>
+                    <th>完了日</th>
+                </tr>
+                </thead>
+            {% for task in tasks %}
+                <tr>
+                    <form action="{% url 'finish' task.id %}" method="post">
+                        {% csrf_token %}
+                    <td><button type="submit" class="btn btn-primary" >完了</button></td>
+                    <td>{{ task.deadline_date }}</td>
+                    <td>{{ task.subject }}</td>
+                    <td>{{ task.note }}</td>
+                    <td>{{ task.created_date }}</td>
+                    <td>{{ task.finished_date }}</td>
+                    </form>
+                </tr>
+            {% endfor %}
+            </table>
+        </main>
+        <footer>
+
+        </footer>
+    </div>
+    
+    <!-- bootstrap -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
